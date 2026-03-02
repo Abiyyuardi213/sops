@@ -1,116 +1,123 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', '| Perbarui Role')
-@section('breadcrumb', 'Perbarui Role')
+@section('breadcrumb')
+    Config: {{ $role->role_name }}
+@endsection
 
 @section('content')
-    <div class="mb-8 flex items-center space-x-4 animate-fade-in">
-        <a href="{{ route('role.index') }}"
-            class="w-10 h-10 bg-white border border-gray-100 rounded-lg flex items-center justify-center text-gray-400 hover:text-blue-600 hover:border-blue-100 transition-all hover:shadow-sm">
-            <i class="fas fa-chevron-left text-xs"></i>
-        </a>
-        <div>
-            <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Perbarui Data Role</h2>
-            <p class="text-gray-500 font-medium italic">SOPS - TNI Angkatan Laut</p>
-        </div>
-    </div>
-
-    <div class="max-w-2xl mx-auto">
-        <div class="layout-card overflow-hidden">
-            <div
-                class="bg-gradient-to-r from-navy-dark to-navy-light px-8 py-4 border-b border-gray-100 flex items-center justify-between">
-                <div class="flex items-center space-x-3 text-white">
-                    <i class="fas fa-pencil-alt text-lg opacity-80"></i>
-                    <h3 class="font-semibold uppercase tracking-widest text-sm">Update Informasi : <span
-                            class="bg-blue-500/20 px-2 py-0.5 rounded ml-2">{{ $role->role_name }}</span></h3>
+    <div class="space-y-8 animate-fade-in-down">
+        <!-- Header Area -->
+        <div class="flex items-center space-x-5">
+            <a href="{{ route('role.index') }}"
+                class="group w-10 h-10 bg-background rounded-md flex items-center justify-center border border-input hover:border-primary/50 transition-all shadow-sm">
+                <i class="fas fa-chevron-left text-muted-foreground group-hover:text-primary transition-colors text-xs"></i>
+            </a>
+            <div>
+                <div
+                    class="flex items-center space-x-3 text-[10px] font-bold uppercase tracking-[0.2em] text-primary/50 mb-1">
+                    <i class="fas fa-pen-fancy text-[8px]"></i>
+                    <span>Pembaruan Konfigurasi</span>
                 </div>
-                <div class="bg-white/10 px-3 py-1 rounded-full border border-white/20 text-xs font-bold text-white uppercase tracking-widest group cursor-help"
-                    title="Dibuat pada {{ $role->created_at->format('d/m/Y H:i') }}">
-                    <i class="far fa-clock mr-1 text-white/60"></i> ID: {{ substr($role->id, 0, 8) }}
-                </div>
+                <h2 class="text-3xl font-bold text-primary tracking-tight">Perbarui Hak Akses</h2>
             </div>
+        </div>
 
-            <form action="{{ route('role.update', $role->id) }}" method="POST" class="p-8 space-y-6">
+        <div class="max-w-3xl">
+            <form action="{{ route('role.update', $role->id) }}" method="POST" class="space-y-8">
                 @csrf
                 @method('PUT')
 
-                <div class="space-y-2">
-                    <label for="role_name"
-                        class="text-sm font-bold text-gray-600 flex items-center uppercase tracking-wide">
-                        Nama Role <span class="text-red-500 ml-1 font-bold">*</span>
-                    </label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-300">
-                            <i class="fas fa-user-tag text-xs"></i>
-                        </span>
-                        <input type="text" name="role_name" id="role_name"
-                            class="block w-full pl-10 pr-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all @error('role_name') border-red-500 @enderror"
-                            placeholder="Contoh: Staff Operasi I, Komandan KRI, dll."
-                            value="{{ old('role_name', $role->role_name) }}" required>
+                <div class="layout-card overflow-hidden">
+                    <div class="bg-muted/30 p-6 border-b border-border flex items-center justify-between">
+                        <h3 class="text-[10px] font-bold text-primary uppercase tracking-[0.3em] flex items-center">
+                            <i class="fas fa-shield-halved mr-3 opacity-30"></i> Security Definition
+                        </h3>
+                        <span class="text-[9px] font-bold text-muted-foreground/40 uppercase tracking-widest font-mono">UID:
+                            {{ substr($role->id, 0, 8) }}</span>
                     </div>
-                    @error('role_name')
-                        <p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
 
-                <div class="space-y-2">
-                    <label for="role_description"
-                        class="text-sm font-bold text-gray-600 flex items-center uppercase tracking-wide">
-                        Deskripsi Role
-                    </label>
-                    <div class="relative">
-                        <span class="absolute top-3 inset-y-0 left-0 pl-3 flex items-start text-gray-300">
-                            <i class="fas fa-align-left text-xs"></i>
-                        </span>
-                        <textarea name="role_description" id="role_description" rows="4"
-                            class="block w-full pl-10 pr-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all @error('role_description') border-red-500 @enderror"
-                            placeholder="Penjelasan wewenang dan cakupan akses role ini...">{{ old('role_description', $role->role_description) }}</textarea>
-                    </div>
-                    @error('role_description')
-                        <p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="space-y-4 pt-2">
-                    <label class="text-sm font-bold text-gray-600 flex items-center uppercase tracking-wide">
-                        Status Role
-                    </label>
-                    <div class="grid grid-cols-2 gap-4">
-                        <label
-                            class="relative flex items-center p-4 border rounded-xl cursor-pointer hover:bg-gray-50 transition-all peer-checked:border-blue-500 peer-checked:bg-blue-50">
-                            <input type="radio" name="role_status" value="1"
-                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
-                                {{ old('role_status', $role->role_status) == '1' ? 'checked' : '' }}>
-                            <div class="ml-3">
-                                <span class="block text-sm font-bold text-gray-900 leading-none">Aktif</span>
-                                <span class="text-xs text-gray-500 font-medium">Bisa digunakan langsung</span>
+                    <div class="p-8 space-y-8">
+                        <div class="space-y-2">
+                            <label for="role_name"
+                                class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70 flex items-center">
+                                Identitas Peran <span class="text-destructive ml-1">*</span>
+                            </label>
+                            <div class="relative group">
+                                <span
+                                    class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-muted-foreground/40 group-focus-within:text-primary transition-colors">
+                                    <i class="fas fa-id-badge text-xs"></i>
+                                </span>
+                                <input type="text" name="role_name" id="role_name"
+                                    class="form-input pl-10 h-12 bg-background border-border hover:border-primary/30 transition-all text-xs font-bold uppercase tracking-widest placeholder:text-muted-foreground/30"
+                                    placeholder="e.g. OPERATION_OFFICER_REAR"
+                                    value="{{ old('role_name', $role->role_name) }}" required>
                             </div>
-                        </label>
-                        <label
-                            class="relative flex items-center p-4 border rounded-xl cursor-pointer hover:bg-gray-50 transition-all peer-checked:border-red-500 peer-checked:bg-red-50">
-                            <input type="radio" name="role_status" value="0"
-                                class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500"
-                                {{ old('role_status', $role->role_status) == '0' ? 'checked' : '' }}>
-                            <div class="ml-3">
-                                <span class="block text-sm font-bold text-gray-900 leading-none">Nonaktif</span>
-                                <span class="text-xs text-gray-500 font-medium">Ditangguhkan sementera</span>
-                            </div>
-                        </label>
-                    </div>
-                    @error('role_status')
-                        <p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+                            @error('role_name')
+                                <p class="text-destructive text-[10px] font-bold mt-2 uppercase tracking-tighter italic">
+                                    {{ $message }}</p>
+                            @enderror
+                        </div>
 
-                <div class="pt-6 border-t border-gray-100 flex items-center justify-end space-x-4">
-                    <a href="{{ route('role.index') }}"
-                        class="px-6 py-2.5 text-gray-500 bg-gray-100/50 hover:bg-gray-100 rounded-lg text-sm font-bold transition-all transition-all">
-                        Batal
-                    </a>
-                    <button type="submit"
-                        class="bg-navy-dark text-white hover:bg-navy-light px-8 py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-navy-dark/10 active:scale-95 transition-all transition-all">
-                        PERBARUI DATA <i class="fas fa-check-circle ml-2 text-xs"></i>
-                    </button>
+                        <div class="space-y-2">
+                            <label for="role_description"
+                                class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Lingkup
+                                Fungsional</label>
+                            <textarea name="role_description" id="role_description" rows="4"
+                                class="form-input min-h-[120px] resize-none bg-background border-border hover:border-primary/30 transition-all text-sm font-medium leading-relaxed placeholder:text-muted-foreground/30"
+                                placeholder="Tentukan lingkup yurisdiksi khusus dan otorisasi operasional untuk peran ini...">{{ old('role_description', $role->role_description) }}</textarea>
+                            @error('role_description')
+                                <p class="text-destructive text-[10px] font-bold mt-2 uppercase tracking-tighter italic">
+                                    {{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="space-y-4 pt-4 border-t border-border">
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Status
+                                Otorisasi</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <label
+                                    class="flex items-center gap-4 p-5 bg-muted/20 border-2 border-transparent has-[:checked]:border-primary has-[:checked]:bg-primary/5 rounded-2xl cursor-pointer transition-all group">
+                                    <input type="radio" name="role_status" value="1"
+                                        class="w-4 h-4 text-primary focus:ring-0"
+                                        {{ old('role_status', $role->role_status) == '1' ? 'checked' : '' }}>
+                                    <div class="space-y-1">
+                                        <span
+                                            class="block text-[11px] font-bold text-primary uppercase tracking-widest">Aktif
+                                            & Diizinkan</span>
+                                        <span
+                                            class="block text-[9px] text-muted-foreground font-bold uppercase tracking-tight opacity-50">Immediate
+                                            system availability</span>
+                                    </div>
+                                </label>
+
+                                <label
+                                    class="flex items-center gap-4 p-5 bg-muted/20 border-2 border-transparent has-[:checked]:border-destructive has-[:checked]:bg-destructive/5 rounded-2xl cursor-pointer transition-all group">
+                                    <input type="radio" name="role_status" value="0"
+                                        class="w-4 h-4 text-destructive focus:ring-0"
+                                        {{ old('role_status', $role->role_status) == '0' ? 'checked' : '' }}>
+                                    <div class="space-y-1">
+                                        <span
+                                            class="block text-[11px] font-bold text-destructive uppercase tracking-widest">Ditangguhkan
+                                            / Draf</span>
+                                        <span
+                                            class="block text-[9px] text-muted-foreground font-bold uppercase tracking-tight opacity-50">Disable
+                                            permissions globally</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-8 bg-muted/30 border-t border-border flex items-center justify-end gap-4">
+                        <a href="{{ route('role.index') }}"
+                            class="px-6 py-2.5 text-[10px] font-bold text-muted-foreground uppercase tracking-widest hover:text-primary transition-colors">Discard
+                            Draft</a>
+                        <button type="submit"
+                            class="btn-primary h-12 px-10 rounded-lg shadow-xl shadow-primary/20 active:scale-[0.98] transition-all">
+                            Simpan Perubahan <i class="fas fa-sync-alt ml-3"></i>
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>

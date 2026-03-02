@@ -13,6 +13,7 @@ class DashboardController extends Controller
         $stats = [
             'total_users' => User::count(),
             'total_roles' => Role::count(),
+            'total_satuans' => \App\Models\Satuan::count(),
             'active_ships' => 12, // Mock data
             'pending_reports' => 5, // Mock data
         ];

@@ -16,27 +16,40 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DermagaController;
+use App\Http\Controllers\SatuanController;
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::prefix('admin')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::resource('dermaga', DermagaController::class);
+    Route::resource('dermaga', DermagaController::class);
 
-Route::prefix('role')->name('role.')->group(function () {
-    Route::get('/', [RoleController::class, 'index'])->name('index');
-    Route::get('/create', [RoleController::class, 'create'])->name('create');
-    Route::post('/', [RoleController::class, 'store'])->name('store');
-    Route::get('/{id}/edit', [RoleController::class, 'edit'])->name('edit');
-    Route::put('/{id}', [RoleController::class, 'update'])->name('update');
-    Route::delete('/{id}', [RoleController::class, 'destroy'])->name('destroy');
-    Route::post('/{id}/toggle-status', [RoleController::class, 'toggleStatus'])->name('toggle-status');
-});
+    Route::prefix('role')->name('role.')->group(function () {
+        Route::get('/', [RoleController::class, 'index'])->name('index');
+        Route::get('/create', [RoleController::class, 'create'])->name('create');
+        Route::post('/', [RoleController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [RoleController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [RoleController::class, 'update'])->name('update');
+        Route::delete('/{id}', [RoleController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/toggle-status', [RoleController::class, 'toggleStatus'])->name('toggle-status');
+    });
 
-Route::prefix('user')->name('user.')->group(function () {
-    Route::get('/', [UserController::class, 'index'])->name('index');
-    Route::get('/create', [UserController::class, 'create'])->name('create');
-    Route::post('/', [UserController::class, 'store'])->name('store');
-    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
-    Route::put('/{id}', [UserController::class, 'update'])->name('update');
-    Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
-    Route::post('/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle-status');
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/', [UserController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle-status');
+    });
+
+    Route::prefix('satuan')->name('satuan.')->group(function () {
+        Route::get('/', [SatuanController::class, 'index'])->name('index');
+        Route::get('/create', [SatuanController::class, 'create'])->name('create');
+        Route::post('/', [SatuanController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [SatuanController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [SatuanController::class, 'update'])->name('update');
+        Route::delete('/{id}', [SatuanController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/toggle-status', [SatuanController::class, 'toggleStatus'])->name('toggle-status');
+    });
 });

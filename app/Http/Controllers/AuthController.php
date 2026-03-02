@@ -22,7 +22,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/role')->with('success', 'Selamat datang kembali, ' . Auth::user()->name . '!');
+            return redirect()->intended(route('dashboard'))->with('success', 'Selamat datang kembali, ' . Auth::user()->name . '!');
         }
 
         return back()->with('error', 'Kredensial yang diberikan tidak cocok dengan catatan kami.');

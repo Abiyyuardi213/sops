@@ -1,119 +1,164 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
-@section('title', '| Perbarui Pengguna')
-@section('breadcrumb', 'Perbarui Pengguna')
+@section('title', '| Perbarui Personel')
+@section('breadcrumb')
+    Ubah: {{ $user->name }}
+@endsection
 
 @section('content')
-    <div class="mb-8 flex items-center space-x-4 animate-fade-in">
-        <a href="{{ route('user.index') }}"
-            class="w-10 h-10 bg-white border border-gray-100 rounded-lg flex items-center justify-center text-gray-400 hover:text-blue-600 transition-all hover:shadow-sm">
-            <i class="fas fa-chevron-left text-xs"></i>
-        </a>
-        <div>
-            <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Perbarui Data Akun</h2>
-            <p class="text-gray-500 font-medium italic text-sm">Modifikasi profil dan hak akses personel</p>
-        </div>
-    </div>
-
-    <div class="max-w-2xl mx-auto">
-        <div class="layout-card overflow-hidden">
-            <div
-                class="bg-gradient-to-r from-navy-dark to-navy-light px-8 py-4 border-b border-gray-100 flex items-center justify-between italic">
-                <div class="flex items-center space-x-3 text-white">
-                    <i class="fas fa-user-edit text-lg opacity-80"></i>
-                    <h3 class="font-semibold uppercase tracking-widest text-sm">Akun Personel : <span
-                            class="bg-blue-500/20 px-2 py-0.5 rounded ml-2">{{ $user->name }}</span></h3>
+    <div class="space-y-8 animate-fade-in-down">
+        <!-- Header Area -->
+        <div class="flex items-center space-x-5">
+            <a href="{{ route('user.index') }}"
+                class="group w-10 h-10 bg-background rounded-md flex items-center justify-center border border-input hover:border-primary/50 transition-all shadow-sm">
+                <i class="fas fa-chevron-left text-muted-foreground group-hover:text-primary transition-colors text-xs"></i>
+            </a>
+            <div>
+                <div
+                    class="flex items-center space-x-3 text-[10px] font-bold uppercase tracking-[0.2em] text-primary/50 mb-1">
+                    <i class="fas fa-user-pen text-[8px]"></i>
+                    <span>Modifikasi Identitas</span>
                 </div>
-                <div class="bg-white/10 px-3 py-1 rounded-full border border-white/20 text-xs font-bold text-white uppercase tracking-widest group cursor-help"
-                    title="ID: {{ $user->id }}">
-                    <i class="far fa-clock mr-1 text-white/60"></i> Aktif Sejak : {{ $user->created_at->format('M Y') }}
-                </div>
+                <h2 class="text-3xl font-bold text-primary tracking-tight">Perbarui Akses Personel</h2>
             </div>
+        </div>
 
-            <form action="{{ route('user.update', $user->id) }}" method="POST" class="p-8 space-y-6">
+        <div class="max-w-4xl">
+            <form action="{{ route('user.update', $user->id) }}" method="POST" class="space-y-8">
                 @csrf
                 @method('PUT')
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="space-y-2">
-                        <label for="name"
-                            class="text-sm font-bold text-gray-600 flex items-center uppercase tracking-wide">
-                            Nama Lengkap <span class="text-red-500 ml-1 font-bold text-xs">*</span>
-                        </label>
-                        <input type="text" name="name" id="name" required
-                            class="block w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all transition-all @error('name') border-red-500 @enderror"
-                            value="{{ old('name', $user->name) }}">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- Primary Information -->
+                    <div class="lg:col-span-8 space-y-8">
+                        <div class="layout-card overflow-hidden">
+                            <div class="bg-muted/30 p-6 border-b border-border flex items-center justify-between">
+                                <h3 class="text-[10px] font-bold text-primary uppercase tracking-[0.3em] flex items-center">
+                                    <i class="fas fa-fingerprint mr-3 opacity-30"></i> Rincian Subjek
+                                </h3>
+                                <span
+                                    class="text-[9px] font-bold text-muted-foreground/40 uppercase tracking-widest font-mono">UID:
+                                    {{ substr($user->id, 0, 8) }}</span>
+                            </div>
+
+                            <div class="p-8 space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="space-y-2">
+                                        <label for="name"
+                                            class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Legal
+                                            Lengkap <span class="text-destructive ml-1">*</span></label>
+                                        <input type="text" name="name" id="name" required
+                                            class="form-input h-12 bg-background border-border hover:border-primary/30 transition-all text-sm font-bold"
+                                            placeholder="e.g. Admiral Andi Wijaya" value="{{ old('name', $user->name) }}">
+                                        @error('name')
+                                            <p
+                                                class="text-destructive text-[10px] font-bold mt-1 uppercase tracking-tighter italic">
+                                                {{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label for="email"
+                                            class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Official
+                                            Resmi (Email) <span class="text-destructive ml-1">*</span></label>
+                                        <input type="email" name="email" id="email" required
+                                            class="form-input h-12 bg-background border-border hover:border-primary/30 transition-all text-sm font-bold lowercase"
+                                            placeholder="endpoint@sops.go.id" value="{{ old('email', $user->email) }}">
+                                        @error('email')
+                                            <p
+                                                class="text-destructive text-[10px] font-bold mt-1 uppercase tracking-tighter italic">
+                                                {{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-border">
+                                    <div class="space-y-2">
+                                        <label for="role_id"
+                                            class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Authorization
+                                            Tingkat Otorisasi <span class="text-destructive ml-1">*</span></label>
+                                        <select name="role_id" id="role_id" required
+                                            class="form-input h-12 bg-background border-border hover:border-primary/30 transition-all text-[11px] font-bold uppercase tracking-widest appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.2em] bg-[right_0.75rem_center] bg-no-repeat">
+                                            @foreach ($roles as $role)
+                                                <option value="{{ $role->id }}"
+                                                    {{ old('role_id', $user->role_id) == $role->id ? 'selected' : '' }}>
+                                                    {{ $role->role_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label for="password"
+                                            class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Security
+                                            Token <span
+                                                class="text-primary/40 font-bold ml-2 opacity-50 italic text-[8px]">(OPSIONAL)</span></label>
+                                        <div class="relative group">
+                                            <span
+                                                class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-muted-foreground/40 group-focus-within:text-primary transition-colors">
+                                                <i class="fas fa-key text-xs"></i>
+                                            </span>
+                                            <input type="password" name="password" id="password"
+                                                class="form-input pl-10 h-12 bg-background border-border hover:border-primary/30 transition-all text-xs font-bold tracking-widest"
+                                                placeholder="KOSONGKAN UNTUK TETAP">
+                                        </div>
+                                        <p class="text-[9px] text-muted-foreground font-bold italic opacity-40">Personnel
+                                            kredensial personel tetap jika dilewati.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="space-y-2">
-                        <label for="email"
-                            class="text-sm font-bold text-gray-600 flex items-center uppercase tracking-wide">
-                            Alamat Email <span class="text-red-500 ml-1 font-bold text-xs">*</span>
-                        </label>
-                        <input type="email" name="email" id="email" required
-                            class="block w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all transition-all @error('email') border-red-500 @enderror"
-                            value="{{ old('email', $user->email) }}">
-                    </div>
-                </div>
+                    <!-- Control Panel -->
+                    <div class="lg:col-span-4 space-y-8">
+                        <div class="layout-card p-8">
+                            <h3
+                                class="text-[10px] font-bold text-primary uppercase tracking-[0.3em] mb-6 flex items-center">
+                                <i class="fas fa-shield-halved mr-3 text-primary/30"></i> Status Verifikasi
+                            </h3>
+                            <div class="space-y-2.5">
+                                <label
+                                    class="flex items-center gap-4 p-4 bg-muted/20 border-2 border-transparent has-[:checked]:border-green-500 has-[:checked]:bg-green-500/5 rounded-2xl cursor-pointer transition-all group">
+                                    <input type="radio" name="status" value="1"
+                                        class="w-4 h-4 text-green-600 focus:ring-0"
+                                        {{ old('status', $user->status) == '1' ? 'checked' : '' }}>
+                                    <div class="space-y-1">
+                                        <span
+                                            class="block text-[11px] font-bold text-green-700 uppercase tracking-widest">Terverifikasi</span>
+                                        <span
+                                            class="block text-[9px] text-muted-foreground font-bold uppercase tracking-tight opacity-50">Authorized
+                                            akses diizinkan</span>
+                                    </div>
+                                </label>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="space-y-2">
-                        <label for="role_id"
-                            class="text-sm font-bold text-gray-600 flex items-center uppercase tracking-wide">
-                            Role / Hak Akses <span class="text-red-500 ml-1 font-bold text-xs">*</span>
-                        </label>
-                        <select name="role_id" id="role_id" required
-                            class="block w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all transition-all @error('role_id') border-red-500 @enderror">
-                            @foreach ($roles as $role)
-                                <option value="{{ $role->id }}"
-                                    {{ old('role_id', $user->role_id) == $role->id ? 'selected' : '' }}>
-                                    {{ $role->role_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                                <label
+                                    class="flex items-center gap-4 p-4 bg-muted/20 border-2 border-transparent has-[:checked]:border-destructive has-[:checked]:bg-destructive/5 rounded-2xl cursor-pointer transition-all group">
+                                    <input type="radio" name="status" value="0"
+                                        class="w-4 h-4 text-destructive focus:ring-0"
+                                        {{ old('status', $user->status) == '0' ? 'checked' : '' }}>
+                                    <div class="space-y-1">
+                                        <span
+                                            class="block text-[11px] font-bold text-destructive uppercase tracking-widest">Ditandai</span>
+                                        <span
+                                            class="block text-[9px] text-muted-foreground font-bold uppercase tracking-tight opacity-50">Revoke
+                                            cabut izin</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
 
-                    <div class="space-y-2">
-                        <label for="password"
-                            class="text-sm font-bold text-gray-600 flex items-center uppercase tracking-wide">
-                            Perbarui Kata Sandi
-                        </label>
-                        <input type="password" name="password" id="password"
-                            class="block w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all transition-all @error('password') border-red-500 @enderror"
-                            placeholder="Kosongkan jika tidak diubah...">
-                        <p class="text-[11px] text-gray-400 italic">Lewati jika Anda tetap ingin menggunakan kata sandi
-                            lama.</p>
+                        <div class="layout-card p-1 bg-primary shadow-2xl shadow-primary/40 border-none">
+                            <div class="p-6 space-y-4">
+                                <button type="submit"
+                                    class="w-full h-12 bg-white text-primary font-bold text-[11px] uppercase tracking-[0.2em] rounded-lg hover:shadow-lg active:scale-[0.98] transition-all">
+                                    Simpan Modifikasi <i class="fas fa-sync-alt ml-3"></i>
+                                </button>
+                                <a href="{{ route('user.index') }}"
+                                    class="block text-center text-[9px] font-bold text-white/40 uppercase tracking-[0.2em] hover:text-white transition-colors">Discard
+                                    Draft</a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <div class="space-y-2 pt-2">
-                    <label class="text-sm font-bold text-gray-600 flex items-center uppercase tracking-wide">
-                        Status Akses Sistem
-                    </label>
-                    <div class="flex items-center space-x-6">
-                        <label class="flex items-center cursor-pointer group">
-                            <input type="radio" name="status" value="1" class="w-4 h-4 text-blue-600"
-                                {{ old('status', $user->status) == '1' ? 'checked' : '' }}>
-                            <span
-                                class="ml-2 text-sm text-gray-700 font-semibold transition-colors group-hover:text-blue-600 uppercase tracking-widest">Aktif</span>
-                        </label>
-                        <label class="flex items-center cursor-pointer group">
-                            <input type="radio" name="status" value="0" class="w-4 h-4 text-red-600"
-                                {{ old('status', $user->status) == '0' ? 'checked' : '' }}>
-                            <span
-                                class="ml-2 text-sm text-gray-700 font-semibold transition-colors group-hover:text-red-600 uppercase tracking-widest">Terblokir</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="pt-6 border-t border-gray-100 flex items-center justify-end space-x-4">
-                    <a href="{{ route('user.index') }}"
-                        class="px-6 py-2.5 text-gray-400 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm font-bold transition-all transition-all transition-all">
-                        Batalkan
-                    </a>
-                    <button type="submit"
-                        class="bg-navy-dark text-white hover:bg-navy-light px-10 py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-navy-dark/10 active:scale-95 transition-all transition-all transition-all">
-                        SIMPAN PERUBAHAN <i class="fas fa-check-circle ml-2 text-xs"></i>
-                    </button>
                 </div>
             </form>
         </div>
