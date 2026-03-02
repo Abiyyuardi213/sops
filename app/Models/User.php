@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
+use App\Models\Role;
 
 class User extends Authenticatable
 {
@@ -21,7 +23,20 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
+        'status',
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function toggleStatus()
+    {
+        $this->status = !$this->status;
+        $this->save();
+    }
 
     /**
      * The attributes that should be hidden for serialization.
